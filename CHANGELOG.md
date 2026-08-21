@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Added the custom wolf face app icon using the provided original image.
+- Added the full original image to the About page.
+- No compatibility or patching behavior changed.
+
 ## 1.0.0
 
 First stable release.

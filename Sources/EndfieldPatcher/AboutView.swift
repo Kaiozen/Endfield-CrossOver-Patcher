@@ -1,9 +1,33 @@
+import AppKit
 import SwiftUI
 
 struct AboutView: View {
+    private var brandImage: NSImage? {
+        guard let url = Bundle.main.url(forResource: "BrandFull", withExtension: "png") else {
+            return nil
+        }
+        return NSImage(contentsOf: url)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
+                if let brandImage {
+                    Image(nsImage: brandImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 520)
+                        .clipShape(
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .strokeBorder(.white.opacity(0.08), lineWidth: 1)
+                        )
+                        .shadow(radius: 10, y: 3)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("About")
                         .font(.largeTitle.bold())

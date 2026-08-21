@@ -35,6 +35,9 @@ cp "$ROOT/LICENSES/LGPL-2.1.txt" "$RES/Legal/LGPL-2.1.txt"
 cp "$ROOT/THIRD_PARTY_NOTICES.md" "$RES/Legal/THIRD-PARTY-NOTICES.md"
 cp "$ROOT/docs/WINE-SOURCE.md" "$RES/Legal/WINE-SOURCE.md"
 
+cp "$ROOT/Resources/Branding/BrandFull.png" "$RES/BrandFull.png"
+cp "$ROOT/Resources/Branding/EndfieldBrand.icns" "$RES/EndfieldBrand.icns"
+
 cat > "$CONTENTS/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
@@ -52,9 +55,11 @@ cat > "$CONTENTS/Info.plist" <<'PLIST'
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.0.0</string>
+  <string>1.0.1</string>
   <key>CFBundleVersion</key>
-  <string>4</string>
+  <string>6</string>
+  <key>CFBundleIconFile</key>
+  <string>EndfieldBrand</string>
   <key>LSMinimumSystemVersion</key>
   <string>14.0</string>
   <key>NSHighResolutionCapable</key>
