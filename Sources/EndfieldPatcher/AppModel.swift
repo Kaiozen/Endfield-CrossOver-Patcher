@@ -13,6 +13,7 @@ final class AppModel: ObservableObject {
     )
 
     @Published var busy = false
+    @Published var checkingReadiness = false
     @Published var progressText = "Checking your Mac"
     @Published var errorText: String?
     @Published var successText: String?
@@ -21,18 +22,44 @@ final class AppModel: ObservableObject {
     @Published var watchReportURL: URL?
 
     let paths = EndfieldPaths()
+
     private var watchTask: Task<Void, Never>?
+    private var readinessTask: Task<Void, Never>?
 
     init() {
-        refresh()
+        // Intentionally empty.
+        //
+        // Do not run readiness checks here. The checks include a short
+        // subprocess used to verify Rosetta. Waiting for that subprocess
+        // while SwiftUI is constructing this StateObject can create an
+        // AttributeGraph cycle on macOS 26.
     }
 
     func refresh() {
+        readinessTask?.cancel()
+
+        let paths = self.paths
+        let profileURL = AppResources.profileURL
+
+        checkingReadiness = true
         errorText = nil
-        readiness = ReadinessService().check(
-            paths: paths,
-            profileURL: AppResources.profileURL
-        )
+
+        readinessTask = Task { [weak self] in
+            let snapshot = await Task.detached(
+                priority: .userInitiated
+            ) {
+                ReadinessService().check(
+                    paths: paths,
+                    profileURL: profileURL
+                )
+            }.value
+
+            guard !Task.isCancelled else { return }
+
+            guard let self else { return }
+            self.readiness = snapshot
+            self.checkingReadiness = false
+        }
     }
 
     func openCrossOver() {
@@ -53,6 +80,7 @@ final class AppModel: ObservableObject {
             )
             return
         }
+
         guard let helper = AppResources.menuHelperURL else {
             errorText =
                 "This build is missing its Endfield launcher helper. Rebuild the app from a clean source checkout."
@@ -84,6 +112,7 @@ final class AppModel: ObservableObject {
             )
             return
         }
+
         guard let helper = AppResources.menuHelperURL else {
             errorText =
                 "This build is missing its Endfield launcher helper."
@@ -109,15 +138,25 @@ final class AppModel: ObservableObject {
     }
 
     func createSupportReport() {
-        do {
-            let url = try DiagnosticsService()
-                .createReport(paths: paths)
-            supportReportURL = url
-            NSWorkspace.shared.activateFileViewerSelecting(
-                [url]
-            )
-        } catch {
-            errorText = human(error)
+        let paths = self.paths
+
+        Task {
+            do {
+                let url = try await Task.detached(
+                    priority: .utility
+                ) {
+                    try DiagnosticsService().createReport(
+                        paths: paths
+                    )
+                }.value
+
+                supportReportURL = url
+                NSWorkspace.shared.activateFileViewerSelecting(
+                    [url]
+                )
+            } catch {
+                errorText = human(error)
+            }
         }
     }
 
@@ -127,6 +166,7 @@ final class AppModel: ObservableObject {
         watchingLaunch = true
         watchReportURL = nil
         errorText = nil
+
         let paths = self.paths
 
         watchTask = Task {
@@ -142,8 +182,10 @@ final class AppModel: ObservableObject {
 
                 watchReportURL = url
                 watchingLaunch = false
-                NSWorkspace.shared
-                    .activateFileViewerSelecting([url])
+
+                NSWorkspace.shared.activateFileViewerSelecting(
+                    [url]
+                )
             } catch is CancellationError {
                 watchingLaunch = false
             } catch {
@@ -163,7 +205,10 @@ final class AppModel: ObservableObject {
         let paths = self.paths
 
         runBackground {
-            try UninstallService().remove(paths: paths)
+            try UninstallService().remove(
+                paths: paths
+            )
+
             return "The Endfield-specific setup was removed and the saved GRYPHLINK launcher was restored."
         }
     }

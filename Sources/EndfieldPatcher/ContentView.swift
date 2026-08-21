@@ -50,5 +50,8 @@ struct ContentView: View {
             minWidth: 880,
             minHeight: 640
         )
+        .task {
+            model.refresh()
+        }
     }
 }
