@@ -30,6 +30,34 @@ if [[ ! -f "$PROFILE" ]]; then
 fi
 cp "$PROFILE" "$RES/Profiles/"
 
+HOOK_SOURCE="$ROOT/Resources/GreenButton/EndfieldGreenButton.m"
+HOOK="$RES/EndfieldGreenButton.dylib"
+
+if [[ ! -f "$HOOK_SOURCE" ]]; then
+  echo "ERROR: macOS fullscreen helper source is missing:" >&2
+  echo "  $HOOK_SOURCE" >&2
+  exit 1
+fi
+
+echo "Building the Endfield macOS fullscreen helper..."
+SDK="$(xcrun --sdk macosx --show-sdk-path)"
+
+xcrun --sdk macosx clang \
+  -arch x86_64 \
+  -dynamiclib \
+  -fobjc-arc \
+  -fblocks \
+  -mmacosx-version-min=14.0 \
+  -isysroot "$SDK" \
+  -framework AppKit \
+  -framework Foundation \
+  -install_name "@loader_path/EndfieldGreenButton.dylib" \
+  "$HOOK_SOURCE" \
+  -o "$HOOK"
+
+codesign --force --sign - "$HOOK"
+file "$HOOK" | grep -q 'x86_64'
+
 cp "$ROOT/LICENSE" "$RES/Legal/PROJECT-LICENSE.txt"
 cp "$ROOT/LICENSES/LGPL-2.1.txt" "$RES/Legal/LGPL-2.1.txt"
 cp "$ROOT/THIRD_PARTY_NOTICES.md" "$RES/Legal/THIRD-PARTY-NOTICES.md"
@@ -55,9 +83,9 @@ cat > "$CONTENTS/Info.plist" <<'PLIST'
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.0.1</string>
+  <string>1.1.0</string>
   <key>CFBundleVersion</key>
-  <string>6</string>
+  <string>7</string>
   <key>CFBundleIconFile</key>
   <string>EndfieldBrand</string>
   <key>LSMinimumSystemVersion</key>

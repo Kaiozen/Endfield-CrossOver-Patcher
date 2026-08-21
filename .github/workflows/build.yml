@@ -30,15 +30,22 @@ jobs:
           test -f "dist/Endfield for CrossOver.app/Contents/Resources/Profiles/endfield-preview-20260717-r11.profile.json"
           test "$(shasum -a 256 "dist/Endfield for CrossOver.app/Contents/Resources/Profiles/endfield-preview-20260717-r11.profile.json" | awk '{print $1}')" = "2babcd451a5e8ade5ec58ab10d0eb6bfa0ba15dc1d2458fd0ce2ff2151782a70"
 
+      - name: Verify fullscreen helper
+        run: |
+          HOOK="dist/Endfield for CrossOver.app/Contents/Resources/EndfieldGreenButton.dylib"
+          test -f "$HOOK"
+          file "$HOOK" | grep -q "x86_64"
+          codesign --verify --strict "$HOOK"
+
       - name: Package app
         run: |
           ditto -c -k --sequesterRsrc --keepParent \
             "dist/Endfield for CrossOver.app" \
-            "dist/Endfield-for-CrossOver-v1.0.0.zip"
+            "dist/Endfield-for-CrossOver-v1.1.0.zip"
 
       - name: Upload complete app artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Endfield-for-CrossOver-v1.0.0
-          path: dist/Endfield-for-CrossOver-v1.0.0.zip
+          name: Endfield-for-CrossOver-v1.1.0
+          path: dist/Endfield-for-CrossOver-v1.1.0.zip
           if-no-files-found: error

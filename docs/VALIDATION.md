@@ -33,6 +33,19 @@ Then I:
 
 The patch completed and the game worked from the fresh setup.
 
+## macOS green fullscreen button
+
+I tested the Endfield-only window fix with the game in Windowed mode. The macOS green button became active and native fullscreen worked.
+
+The exact tested private macOS Wine driver was:
+
+```text
+lib/wine/x86_64-unix/winemac.so
+6b88de59d3c32ccd43b6a0a54097b8da0cf225eef9ccf0598be142ce95a5d43d
+```
+
+v1.1.0 builds the same proven hook into the app. The patcher checks that exact driver before changing it.
+
 ## Compatibility recipe
 
 Release profile SHA-256:
@@ -73,7 +86,7 @@ Before release I also checked:
 
 ## Scope
 
-v1.0.0 is for the exact CrossOver Preview build listed above.
+v1.1.0 is for the exact CrossOver Preview build listed above.
 
 A future CrossOver, macOS, GRYPHLINK, Endfield, or anti-cheat update can still
 change compatibility. Unsupported CrossOver builds are rejected instead of

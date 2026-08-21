@@ -120,3 +120,45 @@ func bottleConfig() throws {
         )
     )
 }
+
+@Test("green button dependency is inserted safely and only once")
+func greenButtonMachOLoadCommand() throws {
+    var data = Data(repeating: 0, count: 1024)
+
+    func put32(_ value: UInt32, _ offset: Int) {
+        data[offset] = UInt8(value & 0xff)
+        data[offset + 1] = UInt8((value >> 8) & 0xff)
+        data[offset + 2] = UInt8((value >> 16) & 0xff)
+        data[offset + 3] = UInt8((value >> 24) & 0xff)
+    }
+
+    put32(0xfeedfacf, 0)
+    put32(1, 16)
+    put32(152, 20)
+
+    let command = 32
+    put32(0x19, command)
+    put32(152, command + 4)
+    put32(1, command + 64)
+
+    let section = command + 72
+    put32(512, section + 48)
+
+    let dependency = "@loader_path/EndfieldGreenButton.dylib"
+
+    #expect(try !MachOLoadCommandEditor.hasLoadDylib(data, name: dependency))
+
+    let patched = try MachOLoadCommandEditor.addingLoadDylib(
+        data,
+        name: dependency
+    )
+
+    #expect(patched.count == data.count)
+    #expect(try MachOLoadCommandEditor.hasLoadDylib(patched, name: dependency))
+
+    let secondPass = try MachOLoadCommandEditor.addingLoadDylib(
+        patched,
+        name: dependency
+    )
+    #expect(secondPass == patched)
+}

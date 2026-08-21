@@ -7,6 +7,7 @@ public struct PatchEngine: Sendable {
         stockRuntime: URL,
         destination: URL,
         profile: PatchProfile,
+        greenButtonHook: URL? = nil,
         progress: @Sendable (String) -> Void = { _ in }
     ) throws {
         let fm = FileManager.default
@@ -36,10 +37,18 @@ public struct PatchEngine: Sendable {
                 "lib/wine/x86_64-unix/ntdll.so"
             )
             if fm.fileExists(atPath: ntdll.path) {
-                try ProcessRunner.requireSuccess(
+                _ = try ProcessRunner.requireSuccess(
                     URL(fileURLWithPath: "/usr/bin/codesign"),
                     ["--force", "--sign", "-", ntdll.path],
                     userMessage: "macOS could not sign the private Endfield compatibility module."
+                )
+            }
+
+            if let greenButtonHook {
+                try GreenButtonInstaller().install(
+                    bundledHook: greenButtonHook,
+                    privateRoot: staging,
+                    progress: progress
                 )
             }
 

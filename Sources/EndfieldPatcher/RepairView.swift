@@ -28,7 +28,7 @@ struct RepairView: View {
                         .font(.headline)
 
                         Text(
-                            "It verifies the private runtime, tested bottle settings, launch connection, and GRYPHLINK helper. It does not change other bottles."
+                            "It verifies the private runtime, tested bottle settings, launch connection, GRYPHLINK helper, and macOS fullscreen button. It does not change other bottles."
                         )
                         .foregroundStyle(.secondary)
 

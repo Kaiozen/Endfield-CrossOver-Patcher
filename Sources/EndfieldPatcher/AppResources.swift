@@ -46,4 +46,25 @@ enum AppResources {
         }
         return nil
     }
+
+    static var greenButtonHookURL: URL? {
+        let fm = FileManager.default
+
+        let release = Bundle.main.resourceURL?
+            .appendingPathComponent("EndfieldGreenButton.dylib")
+
+        if let release,
+           fm.fileExists(atPath: release.path) {
+            return release
+        }
+
+        let dev = URL(
+            fileURLWithPath: fm.currentDirectoryPath
+        ).appendingPathComponent(
+            "dist/Endfield for CrossOver.app/Contents/Resources/EndfieldGreenButton.dylib"
+        )
+
+        return fm.fileExists(atPath: dev.path) ? dev : nil
+    }
+
 }

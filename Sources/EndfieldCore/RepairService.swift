@@ -63,6 +63,7 @@ public struct RepairService: Sendable {
     public func repair(
         profileURL: URL,
         bundledMenuHelper: URL,
+        bundledGreenButtonHook: URL,
         paths: EndfieldPaths = EndfieldPaths(),
         progress: @Sendable (String) -> Void = { _ in }
     ) throws {
@@ -78,9 +79,17 @@ public struct RepairService: Sendable {
                 stockRuntime: inspector.runtimeRoot(for: info.appURL),
                 destination: paths.privateRoot,
                 profile: profile,
+                greenButtonHook: bundledGreenButtonHook,
                 progress: progress
             )
         }
+
+        progress("Checking the macOS fullscreen button")
+        try GreenButtonInstaller().install(
+            bundledHook: bundledGreenButtonHook,
+            privateRoot: paths.privateRoot,
+            progress: progress
+        )
 
         if !report.payloadOK {
             progress("Restoring the Endfield launcher connection")

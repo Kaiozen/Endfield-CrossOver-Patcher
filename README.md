@@ -13,7 +13,7 @@ Grab the newest version from the [Releases page](https://github.com/Kaiozen/Endf
 The download is:
 
 ```text
-Endfield-for-CrossOver-v1.0.0.zip
+Endfield-for-CrossOver-v1.1.0.zip
 ```
 
 Unzip it and open **Endfield for CrossOver.app**.
@@ -44,6 +44,8 @@ Inside that bottle:
 - open GRYPHLINK from CrossOver at least once
 
 You do **not** need to set D3DMetal or MSync yourself. The app handles those settings.
+
+When Endfield is in **Windowed** mode, the app also enables the normal macOS green fullscreen button.
 
 ## Setup
 
@@ -77,6 +79,7 @@ I tried to keep the app simple on purpose. Behind the Set Up button it:
 - backs up the current bottle settings
 - backs up the GRYPHLINK launcher helper
 - connects GRYPHLINK to the private Endfield setup
+- enables the macOS green fullscreen button in Windowed mode
 - checks the finished files before saying the setup worked
 
 Your normal **CrossOver Preview.app stays untouched**.
@@ -96,6 +99,14 @@ It worked from the clean setup.
 I also verified the compatibility recipe against the known-good R11 files, ran the Swift tests, rebuilt the app from source, and checked the finished app bundle before making the release.
 
 That does not mean every future CrossOver or Endfield update will magically work. This release is for the exact CrossOver Preview version listed above.
+
+## Green fullscreen button
+
+When Endfield is in Windowed mode, the normal macOS green button works after setup. You can use it to enter native macOS fullscreen.
+
+There is no extra download or switch. It is part of **Set Up Endfield** and **Repair**.
+
+The change only lives inside Endfield's private runtime. My main CrossOver Preview app and other bottles stay untouched.
 
 ## If something breaks
 

@@ -87,12 +87,19 @@ final class AppModel: ObservableObject {
             return
         }
 
+        guard let greenButtonHook = AppResources.greenButtonHookURL else {
+            errorText =
+                "This build is missing its macOS fullscreen helper. Download the app again."
+            return
+        }
+
         let paths = self.paths
 
         runBackground {
             try InstallService().install(
                 profileURL: profile,
                 bundledMenuHelper: helper,
+                bundledGreenButtonHook: greenButtonHook,
                 paths: paths,
                 progress: { [weak self] text in
                     Task { @MainActor in
@@ -101,7 +108,7 @@ final class AppModel: ObservableObject {
                 }
             )
 
-            return "Endfield is ready. Open CrossOver Preview, choose Arknights Endfield, then open GRYPHLINK."
+            return "Endfield is ready. Windowed mode also has the normal macOS green fullscreen button."
         }
     }
 
@@ -119,12 +126,19 @@ final class AppModel: ObservableObject {
             return
         }
 
+        guard let greenButtonHook = AppResources.greenButtonHookURL else {
+            errorText =
+                "This build is missing its macOS fullscreen helper."
+            return
+        }
+
         let paths = self.paths
 
         runBackground {
             try RepairService().repair(
                 profileURL: profile,
                 bundledMenuHelper: helper,
+                bundledGreenButtonHook: greenButtonHook,
                 paths: paths,
                 progress: { [weak self] text in
                     Task { @MainActor in
@@ -133,7 +147,7 @@ final class AppModel: ObservableObject {
                 }
             )
 
-            return "Repair finished. Try GRYPHLINK again from CrossOver Preview."
+            return "Repair finished. The macOS fullscreen button is ready too."
         }
     }
 

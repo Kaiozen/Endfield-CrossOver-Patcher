@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- Added the normal macOS green fullscreen button to Endfield in Windowed mode.
+- Set Up Endfield installs it automatically.
+- Repair restores it automatically.
+- It stays inside Endfield's private runtime and does not change other bottles.
+- Unknown winemac.so builds are rejected instead of being patched.
+
 ## 1.0.1
 
 - Added the custom wolf face app icon using the provided original image.

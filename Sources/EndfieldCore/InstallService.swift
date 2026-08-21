@@ -6,6 +6,7 @@ public struct InstallService: Sendable {
     public func install(
         profileURL: URL,
         bundledMenuHelper: URL,
+        bundledGreenButtonHook: URL,
         paths: EndfieldPaths = EndfieldPaths(),
         progress: @Sendable (String) -> Void = { _ in }
     ) throws {
@@ -39,6 +40,7 @@ public struct InstallService: Sendable {
             stockRuntime: inspector.runtimeRoot(for: info.appURL),
             destination: paths.privateRoot,
             profile: profile,
+            greenButtonHook: bundledGreenButtonHook,
             progress: progress
         )
 

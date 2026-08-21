@@ -55,6 +55,9 @@ struct SetupView: View {
                         Text(
                             "Your other CrossOver bottles keep using the normal CrossOver runtime."
                         )
+                        Text(
+                            "When Endfield is in Windowed mode, the normal macOS green fullscreen button works too."
+                        )
                     }
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -159,6 +162,12 @@ struct SetupView: View {
                 Text(
                     "Daily use is simple: open CrossOver Preview → Arknights Endfield → GRYPHLINK → Play."
                 )
+                .foregroundStyle(.secondary)
+
+                Text(
+                    "Windowed mode also supports the green macOS fullscreen button."
+                )
+                .font(.footnote)
                 .foregroundStyle(.secondary)
 
                 Button("Open CrossOver Preview") {
