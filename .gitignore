@@ -1,0 +1,10 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+dist/
+*.xcuserstate
+*.zip
+*.log
+Resources/Profiles/*.profile.json
+!Resources/Profiles/README.md

@@ -1,0 +1,21 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Source hygiene
+        run: ./scripts/verify-source.sh
+      - name: Unit tests
+        run: swift test
+      - name: Build app bundle
+        run: ./scripts/build-app.sh
+      - name: Verify app signature
+        run: codesign --verify --deep --strict "dist/Endfield for CrossOver.app"
