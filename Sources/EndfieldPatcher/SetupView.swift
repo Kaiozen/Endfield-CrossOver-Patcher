@@ -27,7 +27,7 @@ struct SetupView: View {
                         )
                         Divider()
                         StatusRow(
-                            title: "Compatibility files",
+                            title: "Compatibility recipe",
                             state: model.readiness.profile
                         )
                     }
@@ -102,7 +102,7 @@ struct SetupView: View {
                 .font(.largeTitle.bold())
 
             Text(
-                "Set up Arknights: Endfield to launch from your normal CrossOver Preview app."
+                "If CrossOver Preview, GRYPHLINK, and Endfield are ready, one click handles the rest."
             )
             .font(.title3)
             .foregroundStyle(.secondary)
@@ -139,7 +139,7 @@ struct SetupView: View {
 
             if !model.readiness.canInstall {
                 Text(
-                    "Finish the items marked “Needs attention” first. The app will not make partial or unverified changes."
+                    "Install the items marked “Needs attention.” Once they are ready, Set Up Endfield handles the compatibility work automatically."
                 )
                 .font(.footnote)
                 .foregroundStyle(.secondary)

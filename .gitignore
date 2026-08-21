@@ -6,5 +6,5 @@ dist/
 *.xcuserstate
 *.zip
 *.log
-Resources/Profiles/*.profile.json
 !Resources/Profiles/README.md
+Resources/Profiles/*.local.profile.json

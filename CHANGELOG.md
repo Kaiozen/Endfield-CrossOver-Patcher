@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0-alpha.1
+
+- Made the verified R11 compatibility recipe part of the public app.
+- Release builds now fail if the recipe is missing instead of shipping a disabled setup button.
+- Tightened readiness checks so `Arknights Endfield` means the actual game executable is installed, not merely that the bottle exists.
+- The player prerequisites are now only the supported CrossOver Preview build plus an `Arknights Endfield` bottle containing GRYPHLINK and Endfield.
+- `Set Up Endfield` automatically handles D3DMetal, MSync, the bottle-private R11 runtime, backups, patch verification, code signing, and the GRYPHLINK bridge.
+- Added one-click setup documentation and Wine/LGPL source-notice material.
+- Added CI packaging for a downloadable macOS app artifact.
+
 ## 0.1.0-dev.2
 
 - Verified the generated R11 profile by independently replaying every patch and reproducing all four golden target files byte-for-byte.

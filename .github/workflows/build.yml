@@ -9,13 +9,36 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+
       - name: Swift version
         run: swift --version
+
       - name: Source hygiene
         run: ./scripts/verify-source.sh
+
       - name: Unit tests
         run: swift test
-      - name: Build app bundle
+
+      - name: Build complete app bundle
         run: ./scripts/build-app.sh
+
       - name: Verify app signature
         run: codesign --verify --deep --strict "dist/Endfield for CrossOver.app"
+
+      - name: Verify bundled compatibility recipe
+        run: |
+          test -f "dist/Endfield for CrossOver.app/Contents/Resources/Profiles/endfield-preview-20260717-r11.profile.json"
+          test "$(shasum -a 256 "dist/Endfield for CrossOver.app/Contents/Resources/Profiles/endfield-preview-20260717-r11.profile.json" | awk '{print $1}')" = "2babcd451a5e8ade5ec58ab10d0eb6bfa0ba15dc1d2458fd0ce2ff2151782a70"
+
+      - name: Package app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            "dist/Endfield for CrossOver.app" \
+            "dist/Endfield-for-CrossOver.zip"
+
+      - name: Upload complete app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Endfield-for-CrossOver
+          path: dist/Endfield-for-CrossOver.zip
+          if-no-files-found: error

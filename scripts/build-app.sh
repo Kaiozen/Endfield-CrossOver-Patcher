@@ -22,12 +22,13 @@ cp "$BIN_PATH/EndfieldMenuHelper" "$RES/EndfieldMenuHelper"
 chmod +x "$MACOS/EndfieldPatcher" "$RES/EndfieldMenuHelper"
 
 PROFILE="$ROOT/Resources/Profiles/endfield-preview-20260717-r11.profile.json"
-if [[ -f "$PROFILE" ]]; then
-  cp "$PROFILE" "$RES/Profiles/"
-else
-  echo "NOTE: release R11 profile is not present."
-  echo "The app will build, but setup will remain disabled."
+if [[ ! -f "$PROFILE" ]]; then
+  echo "ERROR: verified Endfield compatibility recipe is missing:" >&2
+  echo "  $PROFILE" >&2
+  echo "Refusing to build an incomplete one-click app." >&2
+  exit 1
 fi
+cp "$PROFILE" "$RES/Profiles/"
 
 cat > "$CONTENTS/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -46,9 +47,9 @@ cat > "$CONTENTS/Info.plist" <<'PLIST'
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
-  <string>0.1.0-dev.2</string>
+  <string>0.1.0</string>
   <key>CFBundleVersion</key>
-  <string>1</string>
+  <string>3</string>
   <key>LSMinimumSystemVersion</key>
   <string>14.0</string>
   <key>NSHighResolutionCapable</key>

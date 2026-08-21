@@ -21,6 +21,12 @@ public struct InstallService: Sendable {
             throw EndfieldError.missingBottle
         }
 
+        guard fm.fileExists(atPath: paths.endfieldExe.path) else {
+            throw EndfieldError.fileOperation(
+                "Arknights: Endfield was not found in the Arknights Endfield bottle. Install the game from GRYPHLINK first, then check again."
+            )
+        }
+
         guard
             fm.fileExists(atPath: paths.gryphlinkLauncherExe.path) ||
             fm.fileExists(atPath: paths.gryphlinkWindowsShortcut.path)

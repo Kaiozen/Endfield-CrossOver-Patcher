@@ -9,9 +9,9 @@ The goal is simple:
 No second daily CrossOver app. No Terminal launcher. No global replacement of CrossOver's Wine runtime.
 
 > [!IMPORTANT]
-> **Development status:** the native SwiftUI app now builds, opens, and has completed a local Endfield setup transaction on the reference Apple Silicon system using the verified R11 profile. The profile independently reconstructs all four known-good R11 target modules byte-for-byte.
+> **Public alpha status:** the verified R11 compatibility recipe is bundled with the app. Players do not generate profiles, patch Wine manually, or use Terminal. With the supported CrossOver Preview build plus a bottle containing GRYPHLINK and Endfield, **Set Up Endfield** performs the compatibility setup automatically.
 >
-> The R11 binary profile is still intentionally **not committed**. Public release remains blocked on profile licensing/source-compliance review plus a final clean-machine cold-launch validation. Unknown CrossOver builds are never patched.
+> The first profile remains intentionally locked to CrossOver Preview `20260717 / 27.0.0.40734`. Unknown builds are rejected before anything is changed.
 
 ---
 
@@ -27,7 +27,7 @@ No second daily CrossOver app. No Terminal launcher. No global replacement of Cr
 | macOS code-signature verification | Passed |
 | App startup on macOS 26 after AttributeGraph fix | Passed |
 | GUI setup transaction against the reference Endfield installation | Completed successfully |
-| Public R11 profile publication | Pending licensing/source-compliance review |
+| Bundled R11 compatibility recipe | Included in public alpha |
 | Clean-machine cold game launch after GUI setup | Final validation pending |
 | Unrelated-bottle regression check after GUI setup | Final validation pending |
 
@@ -112,6 +112,34 @@ Current references:
 - CrossOver Mac User Guide: https://support.codeweavers.com/crossover-mac-user-guide
 - CrossOver Preview Center: https://www.codeweavers.com/preview/
 - CodeWeavers ARM64 Preview notes: https://www.codeweavers.com/blog/mjohnson/2026/7/31/crossover-preview-the-right-to-bear-arm64-on-mac
+
+---
+
+# One-click setup promise
+
+For a normal player, there is no separate R11 download or profile-generation step.
+
+Prerequisites:
+
+```text
+supported CrossOver Preview
++ Arknights Endfield bottle
++ GRYPHLINK installed
++ Endfield installed from GRYPHLINK
+```
+
+Then:
+
+```text
+Open Endfield for CrossOver
+-> Set Up Endfield
+-> Done
+```
+
+The app handles D3DMetal, MSync, the private runtime, compatibility patching,
+verification, signing, backups, and the GRYPHLINK bridge automatically.
+
+See [docs/ONE-CLICK-SETUP.md](docs/ONE-CLICK-SETUP.md).
 
 ---
 
@@ -301,7 +329,7 @@ Output:
 dist/Endfield for CrossOver.app
 ```
 
-The development build compiles without a real R11 profile, but setup remains disabled until a reviewed profile is present in `Resources/Profiles/`.
+Release builds refuse to compile if the verified compatibility recipe is missing, so an incomplete download cannot silently ship with a disabled setup button.
 
 ## Tests
 

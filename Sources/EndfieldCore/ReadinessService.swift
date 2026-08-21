@@ -14,7 +14,7 @@ public struct ReadinessService: Sendable {
         let crossover: CheckState
         if !platform.isAppleSilicon {
             crossover = .needsAttention(
-                "The first release supports Apple Silicon Macs."
+                "This release supports Apple Silicon Macs."
             )
         } else if !platform.rosettaCanRunX86() {
             crossover = .needsAttention(
@@ -35,12 +35,18 @@ public struct ReadinessService: Sendable {
             }
         }
 
-        let bottle: CheckState =
-            fm.fileExists(atPath: paths.bottleConfig.path)
-            ? .ready
-            : .needsAttention(
+        let bottle: CheckState
+        if !fm.fileExists(atPath: paths.bottleConfig.path) {
+            bottle = .needsAttention(
                 "Create a Windows 11 64-bit bottle named Arknights Endfield."
             )
+        } else if !fm.fileExists(atPath: paths.endfieldExe.path) {
+            bottle = .needsAttention(
+                "Open GRYPHLINK in this bottle and install Arknights: Endfield first."
+            )
+        } else {
+            bottle = .ready
+        }
 
         let gryphlinkProgramFound =
             fm.fileExists(atPath: paths.gryphlinkLauncherExe.path) ||
@@ -55,7 +61,7 @@ public struct ReadinessService: Sendable {
             atPath: paths.gryphlinkHelperExecutable.path
         ) {
             gryphlink = .needsAttention(
-                "GRYPHLINK is installed. Open CrossOver Preview once and open the Arknights Endfield bottle so CrossOver can finish creating its launcher, then check again."
+                "Open GRYPHLINK once from CrossOver Preview so CrossOver can finish creating its launcher, then check again."
             )
         } else {
             gryphlink = .ready
@@ -65,7 +71,7 @@ public struct ReadinessService: Sendable {
             profileURL != nil
             ? .ready
             : .needsAttention(
-                "This development build is waiting for the reviewed R11 compatibility profile."
+                "This copy of Endfield for CrossOver is incomplete. Download the official release again."
             )
 
         return ReadinessSnapshot(

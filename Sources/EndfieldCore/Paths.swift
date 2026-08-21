@@ -55,6 +55,12 @@ public struct EndfieldPaths: Sendable {
         bottle.appendingPathComponent("drive_c/Program Files/GRYPHLINK/Launcher.exe")
     }
 
+    public var endfieldExe: URL {
+        bottle.appendingPathComponent(
+            "drive_c/Program Files/GRYPHLINK/games/Arknights Endfield/Endfield.exe"
+        )
+    }
+
     public var desktopSupportReports: URL {
         home.appendingPathComponent("Desktop", isDirectory: true)
     }

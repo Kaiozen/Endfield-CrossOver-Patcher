@@ -16,7 +16,7 @@ Project: https://www.winehq.org/
 
 Wine is licensed under the GNU Lesser General Public License, version 2.1 or later.
 
-This repository does not ship a complete Wine runtime. If a release includes a compatibility profile containing data derived from modified Wine modules, that profile must retain the relevant LGPL obligations.
+This repository does not ship a complete Wine runtime. The public app includes a version-bound compatibility profile containing replacement data derived from modified Wine modules. That Wine-derived profile is distributed subject to the applicable LGPL-2.1-or-later terms. See `LICENSES/LGPL-2.1.txt` and `docs/WINE-SOURCE.md`.
 
 ## CodeWeavers / CrossOver
 
