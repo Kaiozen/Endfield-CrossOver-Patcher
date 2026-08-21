@@ -9,9 +9,35 @@ The goal is simple:
 No second daily CrossOver app. No Terminal launcher. No global replacement of CrossOver's Wine runtime.
 
 > [!IMPORTANT]
-> **Development status:** the app architecture, installer, repair path, launcher bridge, diagnostics, tests, and documentation are implemented. The final R11 binary patch profile is intentionally **not committed yet**. It must be generated from the exact known-good runtime and reviewed before this project is release-ready. The app refuses setup when that profile is missing. We do not guess or patch unknown binaries.
+> **Development status:** the native SwiftUI app now builds, opens, and has completed a local Endfield setup transaction on the reference Apple Silicon system using the verified R11 profile. The profile independently reconstructs all four known-good R11 target modules byte-for-byte.
+>
+> The R11 binary profile is still intentionally **not committed**. Public release remains blocked on profile licensing/source-compliance review plus a final clean-machine cold-launch validation. Unknown CrossOver builds are never patched.
 
 ---
+
+## Current validation status
+
+| Check | Status |
+|---|---|
+| Exact CrossOver Preview `20260717 / 27.0.0.40734` detection | Passed |
+| Four golden R11 target hashes | Passed |
+| Generated profile independent byte-for-byte replay | Passed |
+| Swift unit tests | 4/4 passed |
+| Native arm64 SwiftUI app build | Passed |
+| macOS code-signature verification | Passed |
+| App startup on macOS 26 after AttributeGraph fix | Passed |
+| GUI setup transaction against the reference Endfield installation | Completed successfully |
+| Public R11 profile publication | Pending licensing/source-compliance review |
+| Clean-machine cold game launch after GUI setup | Final validation pending |
+| Unrelated-bottle regression check after GUI setup | Final validation pending |
+
+The verified local R11 profile SHA-256 is:
+
+```text
+2babcd451a5e8ade5ec58ab10d0eb6bfa0ba15dc1d2458fd0ce2ff2151782a70
+```
+
+The hash is public documentation; the binary-derived profile contents are not published yet.
 
 ## What this changes
 
@@ -247,6 +273,7 @@ docs/
   UX-DESIGN.md
   DEVELOPMENT.md
   SUPPORTED-VERSIONS.md
+  VALIDATION.md
 
 scripts/
   build-app.sh
