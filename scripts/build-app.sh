@@ -10,7 +10,7 @@ MACOS="$CONTENTS/MacOS"
 RES="$CONTENTS/Resources"
 
 rm -rf "$APP"
-mkdir -p "$MACOS" "$RES/Profiles"
+mkdir -p "$MACOS" "$RES/Profiles" "$RES/Legal"
 
 echo "Building Swift release binaries..."
 swift build -c release --product EndfieldPatcher
@@ -30,6 +30,11 @@ if [[ ! -f "$PROFILE" ]]; then
 fi
 cp "$PROFILE" "$RES/Profiles/"
 
+cp "$ROOT/LICENSE" "$RES/Legal/PROJECT-LICENSE.txt"
+cp "$ROOT/LICENSES/LGPL-2.1.txt" "$RES/Legal/LGPL-2.1.txt"
+cp "$ROOT/THIRD_PARTY_NOTICES.md" "$RES/Legal/THIRD-PARTY-NOTICES.md"
+cp "$ROOT/docs/WINE-SOURCE.md" "$RES/Legal/WINE-SOURCE.md"
+
 cat > "$CONTENTS/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
@@ -47,9 +52,9 @@ cat > "$CONTENTS/Info.plist" <<'PLIST'
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
-  <string>0.1.0</string>
+  <string>1.0.0</string>
   <key>CFBundleVersion</key>
-  <string>3</string>
+  <string>4</string>
   <key>LSMinimumSystemVersion</key>
   <string>14.0</string>
   <key>NSHighResolutionCapable</key>

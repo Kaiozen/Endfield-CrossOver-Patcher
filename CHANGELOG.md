@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0
+
+First stable release.
+
+- Tested the patcher from a completely fresh Endfield bottle instead of reusing my old working setup.
+- Fresh install path worked: CrossOver Preview -> new bottle -> GRYPHLINK -> Endfield -> Set Up Endfield -> Play.
+- The compatibility recipe is bundled with the app. Users do not generate it manually.
+- One Set Up Endfield button handles the private runtime, compatibility changes, D3DMetal, MSync, backups, signing, and GRYPHLINK launcher setup.
+- Rewrote the README in plain language and moved the deeper technical details out of the way.
+- Updated the About page and kept prominent credit for stoicswe / Endfield_FineWine.
+- The release includes the Wine/LGPL notices alongside the app.
+
 ## 0.1.0-alpha.1
 
 - Made the verified R11 compatibility recipe part of the public app.

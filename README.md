@@ -1,383 +1,157 @@
 # Endfield for CrossOver
 
-A native macOS setup app for running **Arknights: Endfield** from your normal **CrossOver Preview** installation on Apple Silicon.
+I made this because getting **Arknights: Endfield** working through CrossOver on Apple Silicon was possible, but the setup was way too annoying to repeat or explain to someone else.
 
-The goal is simple:
+This app turns that setup into one button.
 
-> Open CrossOver Preview → open the **Arknights Endfield** bottle → click **GRYPHLINK** → click **Play**.
+If you already have the supported CrossOver Preview build, GRYPHLINK, and Endfield installed in the right bottle, open **Endfield for CrossOver** and click **Set Up Endfield**. That's it.
 
-No second daily CrossOver app. No Terminal launcher. No global replacement of CrossOver's Wine runtime.
+## Download
 
-> [!IMPORTANT]
-> **Public alpha status:** the verified R11 compatibility recipe is bundled with the app. Players do not generate profiles, patch Wine manually, or use Terminal. With the supported CrossOver Preview build plus a bottle containing GRYPHLINK and Endfield, **Set Up Endfield** performs the compatibility setup automatically.
->
-> The first profile remains intentionally locked to CrossOver Preview `20260717 / 27.0.0.40734`. Unknown builds are rejected before anything is changed.
+Grab the newest version from the [Releases page](https://github.com/Kaiozen/Endfield-CrossOver-Patcher/releases/latest).
 
----
-
-## Current validation status
-
-| Check | Status |
-|---|---|
-| Exact CrossOver Preview `20260717 / 27.0.0.40734` detection | Passed |
-| Four golden R11 target hashes | Passed |
-| Generated profile independent byte-for-byte replay | Passed |
-| Swift unit tests | 4/4 passed |
-| Native arm64 SwiftUI app build | Passed |
-| macOS code-signature verification | Passed |
-| App startup on macOS 26 after AttributeGraph fix | Passed |
-| GUI setup transaction against the reference Endfield installation | Completed successfully |
-| Bundled R11 compatibility recipe | Included in public alpha |
-| Clean-machine cold game launch after GUI setup | Final validation pending |
-| Unrelated-bottle regression check after GUI setup | Final validation pending |
-
-The verified local R11 profile SHA-256 is:
+The download is:
 
 ```text
-2babcd451a5e8ade5ec58ab10d0eb6bfa0ba15dc1d2458fd0ce2ff2151782a70
+Endfield-for-CrossOver-v1.0.0.zip
 ```
 
-The hash is public documentation; the binary-derived profile contents are not published yet.
+Unzip it and open **Endfield for CrossOver.app**.
 
-## What this changes
+The app is currently ad-hoc signed, not Apple-notarized, so macOS may complain the first time. If it does, Control-click the app, choose **Open**, then confirm **Open** again.
 
-The patcher keeps your normal `CrossOver Preview.app` unchanged.
+## What you need
 
-For Endfield only, it:
-
-1. makes a private copy of the required CrossOver runtime **inside the Arknights Endfield bottle**;
-2. applies the version-locked Endfield compatibility changes to that private copy;
-3. turns on the tested Endfield bottle settings: **D3DMetal + MSync**;
-4. updates the **GRYPHLINK launcher generated for this one game** so it starts the private Endfield runtime;
-5. keeps backups so **Repair** and **Remove Setup** can recover cleanly.
-
-Other bottles continue using the normal CrossOver Preview runtime.
-
-### In one picture
+Right now I support one specific CrossOver Preview build:
 
 ```text
-CrossOver Preview.app                    unchanged
-│
-├─ your other bottles                   normal CrossOver runtime
-│
-└─ Arknights Endfield
-   │
-   ├─ private Endfield compatibility runtime
-   │  └─ .endfield-r11-runtime/CrossOver/
-   │
-   └─ GRYPHLINK tile
-      └─ Endfield-specific Menu Helper
-         └─ private runtime → GRYPHLINK → Endfield
+CrossOver Preview 20260717
+Build 27.0.0.40734
+Apple Silicon Mac
+Rosetta 2
 ```
 
-The generated GRYPHLINK helper lives at:
+You also need a **Windows 11 64-bit** bottle named exactly:
 
 ```text
-~/Applications/CrossOver/GRYPHLINK/GRYPHLINK.app
+Arknights Endfield
 ```
 
-That helper is specific to GRYPHLINK. **CrossOver Preview.app itself is not patched.**
+Inside that bottle:
 
----
+- install GRYPHLINK
+- install Arknights: Endfield through GRYPHLINK
+- open GRYPHLINK from CrossOver at least once
 
-# Before you start
+You do **not** need to set D3DMetal or MSync yourself. The app handles those settings.
 
-## Supported release target
+## Setup
 
-The first release is deliberately strict.
+Once the things above are installed:
 
-| Requirement | Supported |
-|---|---|
-| Mac | Apple Silicon |
-| CrossOver | **CrossOver Preview** |
-| Tested Preview | **20260717 / build 27.0.0.40734** |
-| Wine architecture | x86_64 through Rosetta 2 |
-| Graphics | D3DMetal |
-| Sync | MSync |
-| Game renderer | DirectX 11 |
-| Bottle name | `Arknights Endfield` |
+1. Quit GRYPHLINK and the game.
+2. Open **Endfield for CrossOver**.
+3. Make sure the checks say everything is ready.
+4. Click **Set Up Endfield**.
+5. Wait for it to say it's done.
 
-**Why only one CrossOver build?** Compatibility patches are binary-specific. A patcher that “tries anyway” on an unknown build is not user-friendly; it is risky. The app checks the exact build and stops with a clear explanation if it does not match.
-
-Newer CrossOver Preview builds can change Wine, the launcher system, D3DMetal behavior, or CPU architecture. They need their own tested profile before support is added.
-
-### A note about the newer ARM64 Preview
-
-CodeWeavers introduced experimental native ARM64 Preview builds on July 31, 2026. Those builds are **not supported by this first profile**. CodeWeavers currently lists major limitations for that experimental path, including no D3DMetal and game launchers that may not work.
-
-Do not use a random third-party reupload of an older CrossOver build just to satisfy the version check. Use software obtained legitimately from CodeWeavers. If the exact supported Preview is no longer available to you, wait for a profile that has been tested against a newer build.
-
-Current references:
-
-- CrossOver Mac User Guide: https://support.codeweavers.com/crossover-mac-user-guide
-- CrossOver Preview Center: https://www.codeweavers.com/preview/
-- CodeWeavers ARM64 Preview notes: https://www.codeweavers.com/blog/mjohnson/2026/7/31/crossover-preview-the-right-to-bear-arm64-on-mac
-
----
-
-# One-click setup promise
-
-For a normal player, there is no separate R11 download or profile-generation step.
-
-Prerequisites:
+Then play normally:
 
 ```text
-supported CrossOver Preview
-+ Arknights Endfield bottle
-+ GRYPHLINK installed
-+ Endfield installed from GRYPHLINK
+CrossOver Preview
+-> Arknights Endfield
+-> GRYPHLINK
+-> Play
 ```
 
-Then:
+No Terminal commands. No separate R11 app. No DLL copying. No extra profile download.
 
-```text
-Open Endfield for CrossOver
--> Set Up Endfield
--> Done
-```
+## What the app actually does
 
-The app handles D3DMetal, MSync, the private runtime, compatibility patching,
-verification, signing, backups, and the GRYPHLINK bridge automatically.
+I tried to keep the app simple on purpose. Behind the Set Up button it:
 
-See [docs/ONE-CLICK-SETUP.md](docs/ONE-CLICK-SETUP.md).
+- checks that you're using the exact CrossOver build I tested
+- makes a separate Endfield-only copy of the parts of CrossOver that need the compatibility fixes
+- applies the tested fixes to that private copy
+- turns on D3DMetal and MSync for the Endfield bottle
+- backs up the current bottle settings
+- backs up the GRYPHLINK launcher helper
+- connects GRYPHLINK to the private Endfield setup
+- checks the finished files before saying the setup worked
 
----
+Your normal **CrossOver Preview.app stays untouched**.
 
-# Setup for normal players
+Your other CrossOver bottles keep using normal CrossOver.
 
-You should not need to understand Wine, DLLs, patch offsets, or launch environments.
+The patcher does not modify `Endfield.exe` or ACE.
 
-## 1. Install CrossOver Preview
+## What I tested before calling this v1.0.0
 
-Use a legally obtained CrossOver Preview installation.
+I didn't want to call this a real release just because it worked on the setup I had already been using.
 
-For the first supported release, you need the exact supported build shown above. The patcher checks this automatically.
+I deleted my Endfield bottle and the old GRYPHLINK helper, made a completely fresh **Arknights Endfield** bottle, installed GRYPHLINK and Endfield again, ran this patcher, and launched the game normally through CrossOver.
 
-## 2. Install GRYPHLINK and Endfield in CrossOver
+It worked from the clean setup.
 
-In CrossOver Preview:
+I also verified the compatibility recipe against the known-good R11 files, ran the Swift tests, rebuilt the app from source, and checked the finished app bundle before making the release.
 
-1. Choose **Install**.
-2. Choose **Install an unlisted application** if GRYPHLINK is not listed.
-3. Select the official GRYPHLINK installer.
-4. Create or choose a **Windows 11 64-bit** bottle.
-5. Name the bottle **Arknights Endfield**.
-6. Finish the GRYPHLINK installation.
-7. Open GRYPHLINK and install Arknights: Endfield.
-8. Close the game and launcher when the download is finished.
+That does not mean every future CrossOver or Endfield update will magically work. This release is for the exact CrossOver Preview version listed above.
 
-The patcher does not download the game, GRYPHLINK, or CrossOver for you.
+## If something breaks
 
-## 3. Open Endfield for CrossOver
+Open **Endfield for CrossOver** and go to **Repair**.
 
-The app checks everything automatically.
+There are also local support reports and a launch checker in the app. Nothing is uploaded automatically.
 
-You will see simple status rows such as:
+If a future CrossOver update changes the files this release expects, the patcher should stop instead of guessing.
 
-- **CrossOver Preview — Ready**
-- **Arknights Endfield — Found**
-- **GRYPHLINK — Found**
-- **Compatibility files — Ready**
+## Big credit to Endfield_FineWine
 
-If something is missing, the app tells you exactly what to do next.
+The biggest credit goes to **stoicswe** and [Endfield_FineWine](https://github.com/stoicswe/Endfield_FineWine).
 
-## 4. Click **Set Up Endfield**
+That project did the original compatibility research that made Endfield work on Apple Silicon through CrossOver. I did not invent that foundation, and I don't want to bury the credit in a footnote.
 
-That is the main setup action.
+This project is my attempt to turn that work into something a normal person can download, click, and use without rebuilding the whole setup by hand.
 
-The app creates backups before changing anything and verifies the result before reporting success.
+Also thanks to the Wine and CodeWeavers developers, and to the upstream work credited by Endfield_FineWine.
 
-## 5. Play normally
+More detailed credits and license information are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-After setup:
+## Privacy
 
-1. Open **CrossOver Preview**.
-2. Select **Arknights Endfield**.
-3. Double-click **GRYPHLINK**.
-4. Click **Play**.
+There is no telemetry.
 
-That is the intended daily workflow.
+The app does not send your game account, device information, CrossOver license information, or logs anywhere.
 
----
+If you create a support report, it stays on your Mac until you decide to share it.
 
-# If something stops working
+## Building it yourself
 
-Open the patcher and choose **Repair**.
+If you want to look through the code or build it yourself:
 
-Repair checks:
-
-- the private Endfield runtime;
-- the exact compatibility hashes;
-- D3DMetal and MSync settings;
-- the GRYPHLINK Menu Helper;
-- whether CrossOver regenerated the helper after an update or menu refresh.
-
-Repair only reapplies the pieces that are missing or changed.
-
-There is also **Create Support Report**. It records the relevant Endfield launch chain locally so a developer can see whether GRYPHLINK, `Games.exe`, or `Endfield.exe` started with the private runtime.
-
-**No report is uploaded automatically. This project has no telemetry.**
-
----
-
-# What the patcher does not do
-
-- It does **not** patch `Endfield.exe`.
-- It does **not** patch ACE game/driver files.
-- It does **not** download or crack the game.
-- It does **not** bypass CrossOver licensing.
-- It does **not** replace CrossOver Preview's runtime globally.
-- It does **not** change other CrossOver bottles.
-- It does **not** promise that an unsupported game configuration can never lead to account action.
-
-This is unofficial compatibility work. Game, launcher, anti-cheat, macOS, or CrossOver updates can break it.
-
----
-
-# A huge thank-you ❤️
-
-## stoicswe / Endfield_FineWine
-
-This project would **not exist** without the original work by **stoicswe** and the
-[Endfield_FineWine](https://github.com/stoicswe/Endfield_FineWine) project.
-
-That project published the first known working Endfield-on-Apple-Silicon CrossOver setup and documented the compatibility research that made the breakthrough possible, including Rosetta behavior and the Wine-side compatibility work built on upstream community research.
-
-This patcher is an attempt to turn that hard-won engineering into something a normal Mac player can set up safely and understand.
-
-**Please visit the original project, read the technical work, and give it a star.** The foundation belongs in the credits, not hidden in a footnote.
-
-Additional thanks:
-
-- the **Wine** and **CodeWeavers** developers whose compatibility work makes projects like this possible;
-- the **dw-proton / Dawn Winery** contributors whose upstream Wine compatibility work informed the original Endfield research;
-- **dazi2011/crossover-patcher** for useful ideas around exact-build validation and safe patcher packaging. This project does **not** include or depend on its proprietary PatchCore.
-
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
----
-
-# Why the interface is intentionally simple
-
-The UI is based on current Apple Human Interface Guidelines and established usability guidance, not on a “gaming dashboard” full of unexplained switches.
-
-The design uses:
-
-- **one obvious primary action** for setup;
-- visible readiness checks so people can **recognize** what is needed instead of remembering instructions;
-- immediate progress and status feedback;
-- plain-language errors with a next step;
-- progressive disclosure for developer details;
-- reversible changes and backups;
-- system controls, SF Symbols, keyboard navigation, VoiceOver labels, and semantic colors;
-- no color-only success/failure communication;
-- no telemetry and no surprise network behavior.
-
-Read the design rationale and references in [docs/UX-DESIGN.md](docs/UX-DESIGN.md).
-
-“Evidence-based” does not mean that one layout is scientifically guaranteed to be perfect for every person. The project follows established human-interface and usability principles, and the release process includes task-based usability testing so the design can be improved with evidence instead of assumption.
-
----
-
-# For developers
-
-## Repository layout
-
-```text
-Sources/
-  EndfieldCore/          setup, inspection, patching, repair, diagnostics
-  EndfieldPatcher/       native SwiftUI macOS app
-  EndfieldMenuHelper/    tiny launcher installed into GRYPHLINK.app
-
-Resources/
-  Profiles/              version-bound compatibility profiles
-
-Tests/
-  EndfieldCoreTests/
-
-docs/
-  INSTALL.md
-  TECHNICAL.md
-  UX-DESIGN.md
-  DEVELOPMENT.md
-  SUPPORTED-VERSIONS.md
-  VALIDATION.md
-
-scripts/
-  build-app.sh
-  generate-profile.py
-  generate-profile.command
-  verify-source.sh
-```
-
-## Build
-
-Requirements:
-
-- macOS 14 or newer
-- Xcode Command Line Tools / Xcode
-- Swift 6
-
-```sh
-./scripts/verify-source.sh
+```bash
+swift test
 ./scripts/build-app.sh
 ```
 
-Output:
+The finished app goes to:
 
 ```text
 dist/Endfield for CrossOver.app
 ```
 
-Release builds refuse to compile if the verified compatibility recipe is missing, so an incomplete download cannot silently ship with a disabled setup button.
+The compatibility recipe used by the release is included in the repository so the public build is the same kind of one-click build I tested.
 
-## Tests
+Technical notes are in the `docs/` folder if you actually want the weeds.
 
-```sh
-swift test
-```
+## A few important notes
 
-The tests use synthetic fixtures. They do not contain CrossOver or game files.
+This is my independent project. It is **not** official software from Gryphline, Hypergryph, CodeWeavers, Apple, or any anti-cheat company.
 
----
+You still need your own legitimate copy of CrossOver, GRYPHLINK, and Arknights: Endfield.
 
-# Release safety
+I do not redistribute CrossOver, GRYPHLINK, Endfield, ACE, or Game Porting Toolkit.
 
-A release profile is accepted only when it identifies:
+CrossOver, Wine, D3DMetal, GRYPHLINK, Arknights: Endfield, and the other names used here belong to their respective owners.
 
-- the exact CrossOver Preview version and build;
-- the exact source file size and SHA-256;
-- the exact target SHA-256;
-- the bounded replacement ranges.
-
-The patch engine copies the user's own local CrossOver runtime into the Endfield bottle, applies the profile there, and verifies every target hash. If validation fails, setup stops.
-
-Unknown builds are rejected. There is no “force patch anyway” button.
-
----
-
-# Privacy
-
-Everything runs locally.
-
-The app does not collect:
-
-- game account information;
-- device identifiers;
-- gameplay data;
-- CrossOver license information;
-- logs unless you explicitly create a support report.
-
-Support reports stay on your Mac until **you** choose to share them.
-
----
-
-# Legal / project status
-
-This is an independent, unofficial compatibility project. It is not affiliated with or endorsed by Gryphline, Hypergryph, Tencent, CodeWeavers, Apple, or an anti-cheat vendor.
-
-CrossOver, Wine, D3DMetal, GRYPHLINK, Arknights: Endfield, and other names belong to their respective owners.
-
-The repository does not redistribute CrossOver, GRYPHLINK, Endfield, ACE, or a complete Wine runtime. Users provide their own legitimate software.
-
-See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+See [LICENSE](LICENSE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and [docs/WINE-SOURCE.md](docs/WINE-SOURCE.md) for the boring-but-important license details.

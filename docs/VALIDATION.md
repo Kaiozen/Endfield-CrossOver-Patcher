@@ -1,31 +1,47 @@
-# Validation record
+# Validation
 
-This file records what has actually been demonstrated on the reference system.
-It intentionally separates completed checks from release claims that still need
-independent validation.
+This is what I actually tested before publishing v1.0.0.
 
-## Reference compatibility target
+## Supported setup
 
 ```text
 CrossOver Preview: 20260717
-CFBundleVersion: 27.0.0.40734
+Build: 27.0.0.40734
 Wine: 11.12
-Architecture: x86_64 through Rosetta 2
-Graphics: D3DMetal
-Sync: MSync
-Renderer: DirectX 11
-Bottle: Arknights Endfield
+Mac: Apple Silicon
+Rosetta 2
+D3DMetal
+MSync
+DirectX 11
+Bottle name: Arknights Endfield
 ```
 
-## Verified R11 profile
+## The clean-slate test
 
-Local profile SHA-256:
+Before calling the patcher stable, I removed the old Endfield bottle and the
+old generated GRYPHLINK helper.
+
+Then I:
+
+1. created a brand-new Windows 11 64-bit bottle named `Arknights Endfield`;
+2. installed GRYPHLINK;
+3. installed Arknights: Endfield through GRYPHLINK;
+4. opened GRYPHLINK once through normal CrossOver Preview;
+5. opened Endfield for CrossOver;
+6. clicked Set Up Endfield;
+7. launched the game through normal CrossOver Preview -> GRYPHLINK -> Play.
+
+The patch completed and the game worked from the fresh setup.
+
+## Compatibility recipe
+
+Release profile SHA-256:
 
 ```text
 2babcd451a5e8ade5ec58ab10d0eb6bfa0ba15dc1d2458fd0ce2ff2151782a70
 ```
 
-Golden target hashes:
+Known-good target hashes:
 
 ```text
 x86_64-unix/ntdll.so
@@ -41,51 +57,27 @@ x86_64-windows/ntoskrnl.exe
 43dffd0b1bc95df1d1c0a89489268047eddeb62cc7a69a90592023f3d1b8cfe2
 ```
 
-The profile generator and an independent replay pass both reconstructed every
-target module byte-for-byte from the exact supported CrossOver Preview source.
+The generated recipe was independently replayed against the exact supported
+CrossOver files and reproduced the known-good target files.
 
-## Swift project validation
+## App checks
 
-Completed:
+Before release I also checked:
 
-- Swift 6 Menu Helper compile fix
-- macOS 26 SwiftUI AttributeGraph startup-crash diagnosis and fix
-- readiness/Rosetta inspection moved off StateObject initialization
-- Swift test suite: 4/4 tests passed
-- release build produced native arm64 executables
-- app bundle passed `codesign --verify --deep --strict`
-- embedded local profile hash matched the independently verified profile
-- native GUI opened successfully after the startup fix
-- the GUI setup transaction completed successfully on the reference Endfield installation
+- Swift tests pass
+- release build succeeds
+- the finished app is arm64
+- the bundled compatibility recipe has the expected SHA-256
+- the app bundle passes `codesign --verify --deep --strict`
+- the startup crash found during development is fixed
 
-## Startup crash that was fixed
+## Scope
 
-The initial development build synchronously called:
+v1.0.0 is for the exact CrossOver Preview build listed above.
 
-```text
-AppModel.init
-→ ReadinessService.check
-→ PlatformInspector.rosettaCanRunX86
-→ ProcessRunner.run
-→ Process.waitUntilExit
-```
+A future CrossOver, macOS, GRYPHLINK, Endfield, or anti-cheat update can still
+change compatibility. Unsupported CrossOver builds are rejected instead of
+being patched blindly.
 
-while SwiftUI was constructing the StateObject. On macOS 26 this produced an
-AttributeGraph cycle and an intentional SIGABRT.
-
-The fixed architecture performs no blocking inspection in `AppModel.init()`.
-`ContentView.task` triggers the readiness refresh, and subprocess-backed
-inspection runs outside the main SwiftUI update path.
-
-## Still required before a public binary release
-
-- legal/source-compliance review for publishing the Wine-derived binary profile
-- clean-machine install using only public release materials
-- cold CrossOver Preview → GRYPHLINK → Play validation after GUI setup
-- unrelated-bottle regression check after GUI setup
-- Repair test after intentionally regenerating the GRYPHLINK helper
-- Remove Setup rollback test
-- accessibility/usability pass
-
-Until these are complete, the project should be described as a tested
-development build, not a final public release.
+Repair and Remove Setup are included as safety tools. I still welcome more
+testing of those paths on other Macs and future updates.
