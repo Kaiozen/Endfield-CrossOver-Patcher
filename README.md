@@ -4,7 +4,7 @@ I made this because getting **Arknights: Endfield** working through CrossOver on
 
 This app turns that setup into one button.
 
-If you already have the supported CrossOver Preview build, GRYPHLINK, and Endfield installed in the right bottle, open **Endfield for CrossOver** and click **Set Up Endfield**. That's it.
+If you already have a supported CrossOver or CrossOver Preview build, GRYPHLINK, and Endfield installed in the right bottle, open **Endfield for CrossOver** and click **Set Up Endfield**. That's it.
 
 ## Download
 
@@ -13,7 +13,7 @@ Grab the newest version from the [Releases page](https://github.com/Kaiozen/Endf
 The download is:
 
 ```text
-Endfield-for-CrossOver-v1.1.0.zip
+Endfield-for-CrossOver-v1.2.0.zip
 ```
 
 Unzip it and open **Endfield for CrossOver.app**.
@@ -84,7 +84,7 @@ I tried to keep the app simple on purpose. Behind the Set Up button it:
 - enables the macOS green fullscreen button in Windowed mode
 - checks the finished files before saying the setup worked
 
-Your normal **CrossOver Preview.app stays untouched**.
+Your normal **CrossOver.app** or **CrossOver Preview.app** stays untouched.
 
 Your other CrossOver bottles keep using normal CrossOver.
 
@@ -108,7 +108,7 @@ When Endfield is in Windowed mode, the normal macOS green button works after set
 
 There is no extra download or switch. It is part of **Set Up Endfield** and **Repair**.
 
-The change only lives inside Endfield's private runtime. My main CrossOver Preview app and other bottles stay untouched.
+The change only lives inside Endfield's private runtime. Your normal CrossOver or CrossOver Preview app and other bottles stay untouched.
 
 ## If something breaks
 
