@@ -1,23 +1,35 @@
+import EndfieldCore
 import Foundation
 
 enum AppResources {
+    private static let previewProfile =
+        "endfield-preview-20260717-r11.profile.json"
+    private static let stableProfile =
+        "endfield-stable-26.3-finewine.profile.json"
+
     static var profileURL: URL? {
+        guard let info = try? CrossOverInspector().find() else {
+            return locateProfile(named: previewProfile) ??
+                locateProfile(named: stableProfile)
+        }
+
+        return locateProfile(
+            named: info.isPreview ? previewProfile : stableProfile
+        )
+    }
+
+    private static func locateProfile(named name: String) -> URL? {
         let fm = FileManager.default
 
         let release = Bundle.main.resourceURL?
-            .appendingPathComponent(
-                "Profiles/endfield-preview-20260717-r11.profile.json"
-            )
-        if let release,
-           fm.fileExists(atPath: release.path) {
+            .appendingPathComponent("Profiles/\(name)")
+        if let release, fm.fileExists(atPath: release.path) {
             return release
         }
 
         let dev = URL(
             fileURLWithPath: fm.currentDirectoryPath
-        ).appendingPathComponent(
-            "Resources/Profiles/endfield-preview-20260717-r11.profile.json"
-        )
+        ).appendingPathComponent("Resources/Profiles/\(name)")
 
         return fm.fileExists(atPath: dev.path) ? dev : nil
     }
@@ -66,5 +78,4 @@ enum AppResources {
 
         return fm.fileExists(atPath: dev.path) ? dev : nil
     }
-
 }

@@ -53,11 +53,10 @@ public struct GreenButtonInstaller: Sendable {
         )
 
         if !alreadyPatched {
-            guard SHA256File.hex(data: data) == Self.expectedWinemacSHA256 else {
-                throw EndfieldError.sourceMismatch(
-                    "x86_64-unix/winemac.so"
-                )
-            }
+            // CrossOver Stable and Preview can ship different winemac.so builds.
+            // MachOLoadCommandEditor performs structural bounds and free-header-space
+            // validation before writing, so newer builds are attempted safely rather
+            // than being rejected only because their whole-file hash changed.
 
             data = try MachOLoadCommandEditor.addingLoadDylib(
                 data,

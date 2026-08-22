@@ -64,9 +64,9 @@ struct AboutView: View {
 
                 GroupBox("Supported CrossOver") {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("CrossOver Preview 20260717")
+                        Text("CrossOver 26.3+ or Preview 20260717+")
                             .font(.headline)
-                        Text("Build 27.0.0.40734")
+                        Text("Preview baseline 27.0.0.40734 • Stable baseline 26.3")
                             .foregroundStyle(.secondary)
                         Text(
                             "Apple Silicon • Rosetta 2 • D3DMetal • MSync • DirectX 11"

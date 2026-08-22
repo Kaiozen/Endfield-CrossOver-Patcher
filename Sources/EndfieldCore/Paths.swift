@@ -67,6 +67,8 @@ public struct EndfieldPaths: Sendable {
 
     public func candidateCrossOverApps() -> [URL] {
         [
+            home.appendingPathComponent("Applications/CrossOver.app", isDirectory: true),
+            URL(fileURLWithPath: "/Applications/CrossOver.app", isDirectory: true),
             home.appendingPathComponent("Applications/CrossOver Preview.app", isDirectory: true),
             URL(fileURLWithPath: "/Applications/CrossOver Preview.app", isDirectory: true),
         ]

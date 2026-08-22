@@ -4,12 +4,27 @@ public struct CrossOverInspector: Sendable {
     public init() {}
 
     public func find(paths: EndfieldPaths = EndfieldPaths()) throws -> CrossOverInfo {
+        var found: [CrossOverInfo] = []
+
         for candidate in paths.candidateCrossOverApps() {
             if FileManager.default.fileExists(atPath: candidate.path) {
-                return try inspect(candidate)
+                found.append(try inspect(candidate))
             }
         }
-        throw EndfieldError.missingCrossOver
+
+        guard !found.isEmpty else {
+            throw EndfieldError.missingCrossOver
+        }
+
+        if let tested = found.first(where: { $0.isBaselineTested }) {
+            return tested
+        }
+
+        if let supported = found.first(where: { $0.matches(.firstRelease) }) {
+            return supported
+        }
+
+        return found[0]
     }
 
     public func inspect(_ app: URL) throws -> CrossOverInfo {

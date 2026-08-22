@@ -26,8 +26,46 @@ public struct CrossOverInfo: Sendable, Equatable {
         self.build = build
     }
 
+    public var isPreview: Bool {
+        appURL.deletingPathExtension().lastPathComponent
+            .localizedCaseInsensitiveContains("preview")
+    }
+
+    public var isBaselineTested: Bool {
+        if isPreview {
+            return shortVersion == SupportedBuild.firstRelease.shortVersion &&
+                build == SupportedBuild.firstRelease.build
+        }
+        return Self.compareVersions(shortVersion, "26.3") == .orderedSame
+    }
+
     public func matches(_ supported: SupportedBuild) -> Bool {
-        shortVersion == supported.shortVersion && build == supported.build
+        if isPreview {
+            return Self.compareVersions(shortVersion, supported.shortVersion) != .orderedAscending
+        }
+        return Self.compareVersions(shortVersion, "26.3") != .orderedAscending
+    }
+
+    private static func compareVersions(
+        _ lhs: String,
+        _ rhs: String
+    ) -> ComparisonResult {
+        func parts(_ value: String) -> [Int] {
+            value.split(whereSeparator: { !$0.isNumber })
+                .compactMap { Int($0) }
+        }
+
+        let a = parts(lhs)
+        let b = parts(rhs)
+        let count = max(a.count, b.count)
+
+        for index in 0..<count {
+            let left = index < a.count ? a[index] : 0
+            let right = index < b.count ? b[index] : 0
+            if left < right { return .orderedAscending }
+            if left > right { return .orderedDescending }
+        }
+        return .orderedSame
     }
 }
 
@@ -172,9 +210,9 @@ public enum EndfieldError: LocalizedError, Sendable {
     public var errorDescription: String? {
         switch self {
         case .unsupportedBuild(let version, let build):
-            return "This CrossOver Preview build is not supported yet. Found \(version) / \(build). Nothing was changed."
+            return "This CrossOver version is older than the supported minimum or cannot be used. Found \(version) / \(build). Nothing was changed."
         case .missingCrossOver:
-            return "CrossOver Preview was not found. Install the supported Preview build, then check again."
+            return "CrossOver was not found. Install CrossOver 26.3+ or CrossOver Preview 20260717+, then check again."
         case .missingBottle:
             return "The Arknights Endfield bottle was not found. Create it in CrossOver Preview and install GRYPHLINK first."
         case .missingGryphlink:

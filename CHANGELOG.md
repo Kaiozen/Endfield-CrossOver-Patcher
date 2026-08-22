@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0
+
+- Added first-class support for normal CrossOver stable alongside CrossOver Preview.
+- Added a CrossOver 26.3 FineWine-derived compatibility profile built from CodeWeavers' Wine 11.0 source.
+- Kept the proven Preview 20260717 / build 27.0.0.40734 R11 profile unchanged.
+- CrossOver 26.3+ and Preview 20260717+ are accepted; older versions are rejected.
+- Newer builds may try the nearest baseline, but source hashes and structural checks still stop unsafe patching.
+- Stable CrossOver is preferred when its verified baseline is installed; a proven Preview baseline remains a safe fallback.
+- The macOS green fullscreen helper now uses structural Mach-O safety checks instead of one Preview-only whole-file hash.
+
 ## 1.1.0
 
 - Added the normal macOS green fullscreen button to Endfield in Windowed mode.

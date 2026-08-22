@@ -14,14 +14,34 @@ func supportedBuild() {
     #expect(info.matches(.firstRelease))
 }
 
-@Test("unsupported CrossOver build is rejected by comparison")
-func unsupportedBuild() {
+@Test("newer CrossOver Preview is allowed to try")
+func newerPreviewBuild() {
     let info = CrossOverInfo(
         appURL: URL(
             fileURLWithPath: "/tmp/CrossOver Preview.app"
         ),
         shortVersion: "20260731",
         build: "27.0.0.99999"
+    )
+    #expect(info.matches(.firstRelease))
+}
+
+@Test("CrossOver stable 26.3 is supported")
+func stableBuild() {
+    let info = CrossOverInfo(
+        appURL: URL(fileURLWithPath: "/Applications/CrossOver.app"),
+        shortVersion: "26.3",
+        build: "26.3.0.1"
+    )
+    #expect(info.matches(.firstRelease))
+}
+
+@Test("older CrossOver stable is rejected")
+func oldStableBuild() {
+    let info = CrossOverInfo(
+        appURL: URL(fileURLWithPath: "/Applications/CrossOver.app"),
+        shortVersion: "26.2",
+        build: "26.2.0.1"
     )
     #expect(!info.matches(.firstRelease))
 }

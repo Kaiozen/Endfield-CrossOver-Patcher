@@ -22,14 +22,16 @@ The app is currently ad-hoc signed, not Apple-notarized, so macOS may complain t
 
 ## What you need
 
-Right now I support one specific CrossOver Preview build:
+The app supports both normal CrossOver and CrossOver Preview:
 
 ```text
-CrossOver Preview 20260717
-Build 27.0.0.40734
+CrossOver 26.3 or newer
+CrossOver Preview 20260717 or newer
 Apple Silicon Mac
 Rosetta 2
 ```
+
+The verified baselines are CrossOver 26.3 and CrossOver Preview 20260717 / build 27.0.0.40734. Newer versions are allowed to try the compatibility recipe, but the patcher still verifies source hashes and stops safely if CodeWeavers changed the Wine modules.
 
 You also need a **Windows 11 64-bit** bottle named exactly:
 
@@ -60,7 +62,7 @@ Once the things above are installed:
 Then play normally:
 
 ```text
-CrossOver Preview
+CrossOver
 -> Arknights Endfield
 -> GRYPHLINK
 -> Play
@@ -72,7 +74,7 @@ No Terminal commands. No separate R11 app. No DLL copying. No extra profile down
 
 I tried to keep the app simple on purpose. Behind the Set Up button it:
 
-- checks that you're using the exact CrossOver build I tested
+- checks that you're using CrossOver 26.3+ or Preview 20260717+ and selects the matching compatibility baseline
 - makes a separate Endfield-only copy of the parts of CrossOver that need the compatibility fixes
 - applies the tested fixes to that private copy
 - turns on D3DMetal and MSync for the Endfield bottle
@@ -98,7 +100,7 @@ It worked from the clean setup.
 
 I also verified the compatibility recipe against the known-good R11 files, ran the Swift tests, rebuilt the app from source, and checked the finished app bundle before making the release.
 
-That does not mean every future CrossOver or Endfield update will magically work. This release is for the exact CrossOver Preview version listed above.
+That does not mean every future CrossOver or Endfield update will magically work. The verified baselines are listed above. Newer builds are experimental until someone confirms gameplay and reports the result.
 
 ## Green fullscreen button
 

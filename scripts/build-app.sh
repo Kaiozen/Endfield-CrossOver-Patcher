@@ -21,14 +21,19 @@ cp "$BIN_PATH/EndfieldPatcher" "$MACOS/EndfieldPatcher"
 cp "$BIN_PATH/EndfieldMenuHelper" "$RES/EndfieldMenuHelper"
 chmod +x "$MACOS/EndfieldPatcher" "$RES/EndfieldMenuHelper"
 
-PROFILE="$ROOT/Resources/Profiles/endfield-preview-20260717-r11.profile.json"
-if [[ ! -f "$PROFILE" ]]; then
-  echo "ERROR: verified Endfield compatibility recipe is missing:" >&2
-  echo "  $PROFILE" >&2
-  echo "Refusing to build an incomplete one-click app." >&2
-  exit 1
-fi
-cp "$PROFILE" "$RES/Profiles/"
+PROFILES=(
+  "$ROOT/Resources/Profiles/endfield-preview-20260717-r11.profile.json"
+  "$ROOT/Resources/Profiles/endfield-stable-26.3-finewine.profile.json"
+)
+for PROFILE in "${PROFILES[@]}"; do
+  if [[ ! -f "$PROFILE" ]]; then
+    echo "ERROR: verified Endfield compatibility recipe is missing:" >&2
+    echo "  $PROFILE" >&2
+    echo "Refusing to build an incomplete Stable + Preview app." >&2
+    exit 1
+  fi
+  cp "$PROFILE" "$RES/Profiles/"
+done
 
 HOOK_SOURCE="$ROOT/Resources/GreenButton/EndfieldGreenButton.m"
 HOOK="$RES/EndfieldGreenButton.dylib"
@@ -83,9 +88,9 @@ cat > "$CONTENTS/Info.plist" <<'PLIST'
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.1.0</string>
+  <string>1.2.0</string>
   <key>CFBundleVersion</key>
-  <string>7</string>
+  <string>8</string>
   <key>CFBundleIconFile</key>
   <string>EndfieldBrand</string>
   <key>LSMinimumSystemVersion</key>

@@ -18,7 +18,7 @@ public struct ReadinessService: Sendable {
             )
         } else if !platform.rosettaCanRunX86() {
             crossover = .needsAttention(
-                "Rosetta 2 is needed for this tested CrossOver build. Install Rosetta, then check again."
+                "Rosetta 2 is needed for the Endfield compatibility runtime. Install Rosetta, then check again."
             )
         } else {
             do {
@@ -26,11 +26,11 @@ public struct ReadinessService: Sendable {
                 crossover = info.matches(.firstRelease)
                     ? .ready
                     : .needsAttention(
-                        "Found \(info.shortVersion) / \(info.build). This release supports \(SupportedBuild.firstRelease.shortVersion) / \(SupportedBuild.firstRelease.build)."
+                        "Found \(info.shortVersion) / \(info.build). Use CrossOver 26.3+ or CrossOver Preview 20260717+."
                     )
             } catch {
                 crossover = .needsAttention(
-                    "Install the supported CrossOver Preview build."
+                    "Install CrossOver 26.3+ or CrossOver Preview 20260717+."
                 )
             }
         }

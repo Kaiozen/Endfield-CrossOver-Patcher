@@ -12,7 +12,7 @@ struct SetupView: View {
                 GroupBox {
                     VStack(spacing: 2) {
                         StatusRow(
-                            title: "CrossOver Preview",
+                            title: "CrossOver",
                             state: model.readiness.crossover
                         )
                         Divider()
@@ -48,7 +48,7 @@ struct SetupView: View {
                     isExpanded: $showTechnical
                 ) {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("CrossOver Preview itself stays unchanged.")
+                        Text("CrossOver itself stays unchanged.")
                         Text(
                             "The app creates a private compatibility runtime for the Arknights Endfield bottle and connects only the GRYPHLINK launcher for this game to it."
                         )
@@ -86,7 +86,7 @@ struct SetupView: View {
                     model.openCrossOver()
                 } label: {
                     Label(
-                        "Open CrossOver Preview",
+                        "Open CrossOver",
                         systemImage: "play.rectangle"
                     )
                 }
@@ -105,7 +105,7 @@ struct SetupView: View {
                 .font(.largeTitle.bold())
 
             Text(
-                "If CrossOver Preview, GRYPHLINK, and Endfield are ready, one click handles the rest."
+                "If CrossOver, GRYPHLINK, and Endfield are ready, one click handles the rest."
             )
             .font(.title3)
             .foregroundStyle(.secondary)
@@ -160,7 +160,7 @@ struct SetupView: View {
                 .font(.title3.bold())
 
                 Text(
-                    "Daily use is simple: open CrossOver Preview → Arknights Endfield → GRYPHLINK → Play."
+                    "Daily use is simple: open CrossOver → Arknights Endfield → GRYPHLINK → Play."
                 )
                 .foregroundStyle(.secondary)
 
@@ -170,7 +170,7 @@ struct SetupView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
-                Button("Open CrossOver Preview") {
+                Button("Open CrossOver") {
                     model.openCrossOver()
                 }
                 .buttonStyle(.borderedProminent)

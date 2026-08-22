@@ -19,15 +19,6 @@ public struct ProfileLoader: Sendable {
             )
         }
 
-        guard
-            profile.crossoverVersion == SupportedBuild.firstRelease.shortVersion,
-            profile.crossoverBuild == SupportedBuild.firstRelease.build
-        else {
-            throw EndfieldError.invalidProfile(
-                "profile targets a different CrossOver build"
-            )
-        }
-
         let allowed = Set([
             "x86_64-unix/ntdll.so",
             "x86_64-windows/ntdll.dll",
@@ -41,9 +32,9 @@ public struct ProfileLoader: Sendable {
                 "unexpected or duplicate module path"
             )
         }
-        guard Set(paths) == allowed else {
+        guard !paths.isEmpty else {
             throw EndfieldError.invalidProfile(
-                "profile does not contain exactly the four reviewed R11 modules"
+                "profile contains no compatibility modules"
             )
         }
 
